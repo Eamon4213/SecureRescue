@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/cornertry0"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        android:text="Information"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="210dp"
+        android:layout_above="@+id/textView2"
+        android:layout_alignLeft="@+id/linearLayout1"
+        android:layout_marginBottom="14dp"
+        android:src="@drawable/dandan" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="Please Enter New Incident&apos;s "
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView3"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="9dp"
+        android:layout_marginRight="9dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/loghorizon2"
+        android:orientation="vertical" >
+
+        <EditText
+            android:id="@+id/edit_name"
+            android:layout_width="208dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:background="@drawable/loghorizon4"
+            android:ems="10"
+            android:hint="Incident&apos;s Name" >
+
+            <requestFocus />
+        </EditText>
+
+        <EditText
+            android:id="@+id/edit_securitylevel"
+            android:layout_width="208dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="9dp"
+            android:layout_weight="1"
+            android:background="@drawable/loghorizon4"
+            android:ems="10"
+            android:hint="Security Level"
+            android:inputType="number" />
+
+        <Button
+            android:id="@+id/create_incidents"
+            android:layout_width="208dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="13dp"
+            android:layout_weight="1"
+            android:background="@drawable/loghorizon1"
+            android:text="Create" />
+    </LinearLayout>
+
+</RelativeLayout>
