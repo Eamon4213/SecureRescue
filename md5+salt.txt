@@ -1,0 +1,92 @@
+如果直接对密码进行散列，那么黑客可以对通过获得这个密码散列值，然后通过查散列值字典（例如MD5密码破解网站），得到某用户的密码
+当用户首次提供密码时（通常是注册时），由系统自动往这个密码里撒一些“佐料”，然后再散列。而当用户登录时，系统为用户提供的代码撒上同样的“佐料”，然后散列，再比较散列值，已确定密码是否正确。
+“佐料”被称作“Salt值”，这个值是由系统随机生成的，并且只有系统知道。这样，即便两个用户使用了同一个密码，由于系统为它们生成的salt值不同，他们的散列值也是不同的。即便黑客可以通过自己的密码和自己生成的散列值来找具有特定密码的用户，但这个几率太小了（密码和salt值都得和黑客使用的一样才行）
+下面详细介绍一下加Salt散列的过程。介绍之前先强调一点，前面说过，验证密码时要使用和最初散列密码时使用“相同的”佐料。所以Salt值是要存放在数据库里的。
+
+用户注册时，
+
+用户输入【账号】和【密码】（以及其他用户信息）；
+系统为用户生成【Salt值】；
+系统将【Salt值】和【用户密码】连接到一起；
+对连接后的值进行散列，得到【Hash值】；
+将【Hash值1】和【Salt值】分别放到数据库中。
+
+用户登录时，
+
+用户输入【账号】和【密码】；
+系统通过用户名找到与之对应的【Hash值】和【Salt值】；
+系统将【Salt值】和【用户输入的密码】连接到一起；
+对连接后的值进行散列，得到【Hash值2】（注意是即时运算出来的值）；
+比较【Hash值1】和【Hash值2】是否相等，相等则表示密码正确，否则表示密码错误。
+有时候，为了减轻开发压力，程序员会统一使用一个salt值（储存在某个地方），而不是每个用户都生成私有的salt值
+
+看看Java ，讲的很详细
+
+（1）读入帐号口令
+String name=args[0];
+String passwd=args[1];
+分析：这里为了简便而通过命令行读入帐号和口令，实际程序中可以制作图形界面供用户输入。
+（2）生成随机数（盐）
+Random rand = new Random();
+byte[] salt = new byte[12];
+rand.nextBytes(salt);
+分析：创建字节数组salt。使用Java中Random类生成随机数，执行Random类的nextBytes()方法，方法的参数为salt，即可生成的随机数并将随机数赋值给salt。
+（3）生成MessageDigest对象
+MessageDigest m=MessageDigest.getInstance(“MD5″);
+分析：执行MessageDigest类的静态方法getInstance()生成MessageDigest对象。其中传入的参数指定计算消息摘要所使用的算法。
+（4）传入盐和需要计算的字节数组
+m.update(salt);
+m.update(passwd.getBytes(“UTF8″));
+分析：将第2步的盐和第1步的口令分别传递给MessageDigest对象的update( )方法。
+（5）计算消息摘要
+byte s[]=m.digest();
+分析：执行MessageDigest对象的digest()方法完成计算，计算的结果通过字节类型的数组返回。
+（6）在文件中或数据库中保存帐号和口令的消息摘要
+PrintWriter out= new PrintWriter(new FileOutputStream(“passwdsalt.txt”));
+out.println(name);
+for(int i=0;i<salt.length;i++){
+out.print(salt[i]+ “,”);
+}
+out.println(“”);
+out.println(result);
+分析：这里将帐号、盐和口令消息摘要报存在passwd.txt文件中。对于盐，这里将数组中各个byte值以数字保存在文件中，各个数字之间以逗号隔开，这样比较直观，实际使用时可直接将字节数组以二进制保存。
+
+具体实现
+
+import java.util.*;
+import java.io.*;
+import java.security.*;
+
+public class SetPassSalt {
+	public static void main(String args[]) throws Exception {
+		// 读入账号口令
+		String name = "lbwleon.info";
+		String passwd = "lbwleon.info";
+		// 生成盐
+		Random rand = new Random();
+		byte[] salt = new byte[12];
+		rand.nextBytes(salt);
+		// 计算消息摘要
+		MessageDigest m = MessageDigest.getInstance("MD5");
+		m.update(salt);
+		m.update(passwd.getBytes("UTF8"));
+		byte s[] = m.digest();
+		String result = "";
+		for (int i = 0; i < s.length; i++) {
+			result += Integer.toHexString((0x000000ff & s[i]) | 0xffffff00)
+					.substring(6);
+		}
+		// 保存账号、盐和消息摘要
+		PrintWriter out = new PrintWriter(new FileOutputStream(
+				"d:/passwdsalt.txt"));
+
+		out.println(name);
+		for (int i = 0; i < salt.length; i++) {
+			out.print(salt[i] + ",");
+		}
+		out.println("");
+
+		out.println(result);
+		out.close();
+	}
+}
