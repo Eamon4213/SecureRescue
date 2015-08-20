@@ -1,2 +1,2 @@
-# Android App: Secure Rescue
+# Secure Rescue
 Project for ECE 644 Trustworthy Computing @UMassAmherst.
