@@ -1,5 +1,6 @@
 # Secure Rescue
 Project for ECE 644 Trustworthy Computing @UMassAmherst.
 
-## client appllication
+## client application
 
+![Alt text](/img/client_app "client application")
