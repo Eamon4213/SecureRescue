@@ -1,0 +1,50 @@
+Constructed a secure communicate system for emergency situations
+
+the user authority authentication 
+the security of the communication process
+encryption algorithm md5 salt in login system encrypt password
+the network authentication protocol kerberos algorithm
+
+present the whole process of encryption and transportation in ourself API
+design a hacker simulation program to prove the reliability of the system
+
+a set of Kerberos algorithm model including Authentication Server(AS), Ticket Granting Server(TGS) and Kerberos Database
+
+Message-Digest Algorithm 5 MD5 divide string into chunks of 512-bit blocks, outputs 128 bits hash value. pass md5 hash connect username md5 hash then md5 again.
+MD5 Salt 
+
+Constructed a complete set of security mechanism to protect both the front end and back end of the emergency response system.
+Implemented a login authority allocation mechanism using MD5 Salt algorithm 
+Established a set of Kerberos algorithm model including Authentication Server(AS), Ticket Granting Server(TGS), and Kerberos Database to provide a secure communication process.
+
+Client Authentication
+1. The client sends a cleartext message of the user ID to the AS (Authentication Server) requesting services on behalf of the user. (Note: Neither the secret key nor the password is sent to the AS.) The AS generates the secret key by hashing the password of the user found at the database (e.g., Active Directory in Windows Server).
+2. The AS checks to see if the client is in its database. If it is, the AS sends back the following two messages to the client:
+Message A: Client/TGS Session Key encrypted using the secret key of the client/user.
+Message B: Ticket-Granting-Ticket (TGT, which includes the client ID, client network address, ticket validity period, and the client/TGS session key) encrypted using the secret key of the TGS.
+3. Once the client receives messages A and B, it attempts to decrypt message A with the secret key generated from the password entered by the user. If the user entered password does not match the password in the AS database, the client's secret key will be different and thus unable to decrypt message A. With a valid password and secret key the client decrypts message A to obtain the Client/TGS Session Key. This session key is used for further communications with the TGS. (Note: The client cannot decrypt Message B, as it is encrypted using TGS's secret key.) At this point, the client has enough information to authenticate itself to the TGS.
+
+Client Service Authorization
+1. When requesting services, the client sends the following two messages to the TGS:
+Message C: Composed of the TGT from message B and the ID of the requested service.
+Message D: Authenticator (which is composed of the client ID and the timestamp), encrypted using the Client/TGS Session Key.
+2. Upon receiving messages C and D, the TGS retrieves message B out of message C. It decrypts message B using the TGS secret key. This gives it the "client/TGS session key". Using this key, the TGS decrypts message D (Authenticator) and sends the following two messages to the client:
+Message E: Client-to-server ticket (which includes the client ID, client network address, validity period and Client/Server Session Key) encrypted using the service's secret key.
+Message F: Client/Server Session Key encrypted with the Client/TGS Session Key.
+
+User Client-based Logon
+1. A user enters a username and password on the client machines. Other credential mechanisms like pkinit allow for the use of public keys in place of a password.
+2. The client transforms the password into the key of a symmetric cipher. This either uses the built in key scheduling or a one-way hash depending on the cipher-suite used.
+
+Client Service Request
+1. Upon receiving messages E and F from TGS, the client has enough information to authenticate itself to the SS. The client connects to the SS and sends the following two messages:
+Message E from the previous step (the client-to-server ticket, encrypted using service's secret key).
+Message G: a new Authenticator, which includes the client ID, timestamp and is encrypted using Client/Server Session Key.
+2. The SS decrypts the ticket using its own secret key to retrieve the Client/Server Session Key. Using the sessions key, SS decrypts the Authenticator and sends the following message to the client to confirm its true identity and willingness to serve the client:
+Message H: the timestamp found in client's Authenticator (plus 1 in version 4, but not necessary in version 5), encrypted using the Client/Server Session Key.
+3. The client decrypts the confirmation using the Client/Server Session Key and checks whether the timestamp is correct. If so, then the client can trust the server and can start issuing service requests to the server.
+4. The server provides the requested services to the client.
+
+* Developed a complete set of mechanism to protect the emergency response system, including access control, user authority allocation, communication encryption.
+* Designed the user interface of the client app on Android platform.
+* Implemented the functionality of the client app, including POIs(Points of Interest) post and display, Kerberos algorithm in transmit process, MD5 Salt algorithm in login system.
