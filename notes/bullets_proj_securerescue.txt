@@ -45,6 +45,6 @@ Message H: the timestamp found in client's Authenticator (plus 1 in version 4, b
 3. The client decrypts the confirmation using the Client/Server Session Key and checks whether the timestamp is correct. If so, then the client can trust the server and can start issuing service requests to the server.
 4. The server provides the requested services to the client.
 
-* Developed a set of mechanism to protect the emergency response system, including access control, user authority allocation, communication encryption.
+* Developed a set of mechanisms to protect the emergency response system, including access control, user authority allocation, communication encryption.
 * Designed the user interface of the client app on Android platform.
 * Implemented the functionality of the client app, including POIs(Points of Interest) post and display, Kerberos algorithm in transmit process, MD5 Salt algorithm in login system.
