@@ -1,5 +1,5 @@
 # Secure Rescue
-Project for Trustworthy Computing @UMassAmherst.
+Network Security Project @UMassAmherst.
 
 ## demo
 
