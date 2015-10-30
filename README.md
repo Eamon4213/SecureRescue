@@ -1,5 +1,5 @@
 # Secure Rescue
-Project for ECE 644 Trustworthy Computing @UMassAmherst.
+Project for Trustworthy Computing @UMassAmherst.
 
 ## demo
 
